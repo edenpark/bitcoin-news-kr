@@ -1,23 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from 'containers/App';
+import Root from 'containers/Root';
+
+import { browserHistory } from 'react-router';
 
 import firebase from 'firebase';
 import firebaseConfig from '../config/firebase';
 
 // redux
 import configureStore from 'redux/configureStore';
-import { Provider } from 'react-redux';
 
 firebase.initializeApp(firebaseConfig);
 
 const store = configureStore();
 
+const rootElement = document.getElementById('root')
+
 ReactDOM.render(
-    (
-        <Provider store={store}>
-            <App />
-        </Provider>
-    ),
-  document.getElementById('root')
+    <Root store={store}
+        history={browserHistory} />, rootElement
 );
