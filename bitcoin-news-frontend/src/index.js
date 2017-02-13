@@ -4,13 +4,12 @@ import Root from 'containers/Root';
 
 import { browserHistory } from 'react-router';
 
-import firebase from 'firebase';
-import firebaseConfig from '../config/firebase';
+import firebaseHelper from 'helpers/firebase';
 
 // redux
 import configureStore from 'redux/configureStore';
 
-firebase.initializeApp(firebaseConfig);
+firebaseHelper.initialize();
 
 const store = configureStore();
 

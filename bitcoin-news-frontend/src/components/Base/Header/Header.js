@@ -4,6 +4,8 @@ import React from 'react';
 export { default as BrandLogo } from './BrandLogo';
 export { default as SidebarButton } from './SidebarButton';
 export { default as AuthButton } from './AuthButton';
+export { default as UserButton } from './UserButton';
+export { default as UserMenu } from './UserMenu';
 // import  BrandLogo from './BrandLogo';
 // export { BrandLogo };
 
