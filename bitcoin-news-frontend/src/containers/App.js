@@ -151,7 +151,7 @@ class App extends Component {
 
         return(
             <div>
-                <Header>
+                <Header visible={header.get('visible')}>
                     <SidebarButton />
                     <BrandLogo />
                     {

@@ -10,7 +10,8 @@ export { default as UserMenu } from './UserMenu';
 // export { BrandLogo };
 
 
-const Header  = ({children}) => {
+const Header  = ({children, visible}) => {
+    if(!visible) return null;
     return (
         <div>
             <div className="header-wrapper">

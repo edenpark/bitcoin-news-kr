@@ -5,7 +5,7 @@ const SortItem = ({value, position, currentValue, icon, onSelect, tooltip}) => (
     <Popup
         trigger={(
             <div
-                className={` sort-item ${position} ${value===currentValue ? 'active' : ''} `}
+                className={`sort-item ${position} ${value===currentValue ? 'active' : ''}`}
                 onClick={() => onSelect(value)}>
                 <Icon name={icon} fitted />
             </div>

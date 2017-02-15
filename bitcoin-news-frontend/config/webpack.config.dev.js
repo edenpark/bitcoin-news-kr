@@ -85,6 +85,7 @@ module.exports = {
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
+    noParse: /node_modules\/quill\/dist/,
     preLoaders: [
       {
         test: /\.(js|jsx)$/,

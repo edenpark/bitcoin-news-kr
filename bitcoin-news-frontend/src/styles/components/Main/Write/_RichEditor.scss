@@ -1,0 +1,22 @@
+.rich-editor {
+    @import '~react-quill/dist/quill.snow.css';
+
+    .title {
+        margin-bottom: 1rem;
+        .ui.form {
+            textarea {
+                border-top: none;
+                border-left: none;
+                border-right: none;
+                border-radius: 0;
+                height: 3rem!important;
+            }
+        }
+    }
+    .extra {
+        display: none;
+        &.show {
+            display: block;
+        }
+    }
+}

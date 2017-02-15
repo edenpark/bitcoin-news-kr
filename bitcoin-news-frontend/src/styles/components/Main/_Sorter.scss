@@ -1,7 +1,7 @@
 .sorter-wrapper {
     .sorter {
         background: white;
-        border-radius: 1.5rem;
+        border-radius: 0.75rem;
         position: relative;
         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
         transition: all .3s;
@@ -23,8 +23,8 @@
 
             &.left {
                 transform: translateX(0%);
-                border-top-left-radius: 1.5rem;
-                border-bottom-left-radius: 1.5rem;
+                border-top-left-radius: 0.75rem;
+                border-bottom-left-radius: 0.75rem;
             }
 
             &.center {
@@ -33,8 +33,8 @@
 
             &.right {
                 transform: translateX(200%);
-                border-top-right-radius: 1.5rem;
-                border-bottom-right-radius: 1.5rem;
+                border-top-right-radius: 0.75rem;
+                border-bottom-right-radius: 0.75rem;
             }
         }
 
@@ -53,13 +53,13 @@
             transition: all .3s;
 
             &.left {
-                border-top-left-radius: 1.5rem;
-                border-bottom-left-radius: 1.5rem;
+                border-top-left-radius: 0.75rem;
+                border-bottom-left-radius: 0.75rem;
             }
 
             &.right {
-                border-top-right-radius: 1.5rem;
-                border-bottom-right-radius: 1.5rem;
+                border-top-right-radius: 0.75rem;
+                border-bottom-right-radius: 0.75rem;
             }
             &:hover {
                 background: $oc-gray-0;

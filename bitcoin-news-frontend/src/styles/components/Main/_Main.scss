@@ -1,6 +1,8 @@
+@import 'Write/all';
+
 .main {
     @import 'Sorter';
     @import 'Favorite';
-    
+    @import 'ButtonSet';
     padding-top: 2rem;
 }

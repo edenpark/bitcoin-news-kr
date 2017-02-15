@@ -1,9 +1,8 @@
 import React from 'react';
 
-const Dimmer = () => {
+const Dimmer = ({onClick}) => {
     return(
-        <div className="dimmer">
-            Dimmer
+        <div className="dimmer" onClick={onClick}>
         </div>
     );
 };

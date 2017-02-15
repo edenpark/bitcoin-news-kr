@@ -4,7 +4,7 @@ import EyeCatchy from 'components/Common/EyeCatchy';
 import SocialLoginButton from './SocialLoginButton';
 
 class LoginModal extends Component {
-    state ={
+    state = {
         closing: false
     }
 

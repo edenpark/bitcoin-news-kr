@@ -7,9 +7,9 @@ class Modal extends Component {
     static propType = {
         onHide: PropTypes.func, // function to hide a modal
         visible: PropTypes.bool,
-        classNale: PropTypes.string
+        className: PropTypes.string
     }
-    
+
     state ={
         closing: false
     }
