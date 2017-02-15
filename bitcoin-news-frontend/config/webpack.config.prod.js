@@ -170,7 +170,8 @@ module.exports = {
           name: 'static/media/[name].[hash:8].[ext]'
         }
       }
-    ]
+    ],
+  noParse: /node_modules\/quill\/dist/
   },
 
   // We use PostCSS for autoprefixing only.

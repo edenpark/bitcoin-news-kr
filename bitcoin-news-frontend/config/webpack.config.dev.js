@@ -85,7 +85,6 @@ module.exports = {
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
-    noParse: /node_modules\/quill\/dist/,
     preLoaders: [
       {
         test: /\.(js|jsx)$/,
@@ -164,7 +163,8 @@ module.exports = {
           name: 'static/media/[name].[hash:8].[ext]'
         }
       }
-    ]
+    ],
+    noParse: /node_modules\/quill\/dist/
   },
 
   // We use PostCSS for autoprefixing only.
