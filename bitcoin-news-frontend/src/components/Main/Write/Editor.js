@@ -3,7 +3,8 @@ import RichEditor from './RichEditor';
 import UrlEditor from './UrlEditor';
 
 const Editor = ({activeEditor, visible, richEditor, onValidate,
-                onRichTitle, onRichContent, urlEditor, onUrlData
+                onRichTitle, onRichContent, urlEditor, onUrlData,
+                onUrlNote
                 }) => {
 
     return(
@@ -19,9 +20,11 @@ const Editor = ({activeEditor, visible, richEditor, onValidate,
             />
             <UrlEditor editor={activeEditor}
                         visible={visible}
+                        link={urlEditor.get('link')}
                         validity={urlEditor.get('validity')}
                         metadata={urlEditor.get('metadata')}
                         onChangeData={onUrlData}
+                        onChangeNote={onUrlNote}
             />
         </div>
     );

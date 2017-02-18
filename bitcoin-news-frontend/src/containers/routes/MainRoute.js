@@ -18,6 +18,10 @@ import * as write from 'redux/modules/write';
 
 import MetaInspector from 'node-metainspector';
 import validator from 'validator';
+// import franc from 'franc';
+// var googleTranslate = require('google-translate')('AIzaSyDn87dgXOFWk-yJ9SM2-VvU2Tg9zrP4Jtc');
+import translate from 'helpers/translate';
+
 
 class MainRoute extends Component {
 
@@ -49,18 +53,6 @@ class MainRoute extends Component {
         }
     })()
 
-    // handleRichTitle = (e) => {
-    //     const { WriteActions } = this.props;
-    //     const value = e.target.value;
-    //
-    //     return WriteActions.setRichTitle(value);
-    // }
-    //
-    // handleRichContent = (value) => {
-    //     const { WriteActions } = this.props;
-    //
-    //     return WriteActions.setRichContent(value);
-    // }
 
     handleRichEditor = (() => {
         const { WriteActions } = this.props;
@@ -97,21 +89,60 @@ class MainRoute extends Component {
         // Save data
     }
 
+    handleUrlData = async (url) => {
+        /* This is for testing google translation without CROS
 
-    handleUrlData = (url) => {
+        const { WriteActions } = this.props;
+
+        const orgTitle = 'EU Proposes Storing Personal Data From Digital Currency E-Commerce In The Union';
+        const orgDescription = 'A Committee of the European Parliament has proposed an amendment which includes e-commerce transactions using digital currencies, including bitcoin.';
+        const source = 'news.bitcoin.com';
+        const image = "https://news.bitcoin.com/wp-content/uploads/2017/02/EU-Proposes-Storing-Personal-Data-From-Digital-Currency-E-Commerce-In-The-Union.png";
+
+        const translateResult = await translate(orgTitle, orgDescription);
+
+        const { title, description } = translateResult;
+
+        WriteActions.setUrlLink(url);
+        WriteActions.setUrlMetadata({
+            title: title,
+            description: description,
+            image: image,
+            source: source
+        });
+
+        // Update validity
+        WriteActions.setUrlValidity({
+            valid: true,
+            message: null,
+            fetching: false,
+            fetched: true
+        });
+
+        */
+
         const { WriteActions } = this.props;
         const client = new MetaInspector(url, { timeout: 50000});
 
-        client.on('fetch', () => {
-            // Store data
+        client.on('fetch', async () => {
+            const translateResult = await translate(client.title, client.description);
+            const { title, description } = translateResult;
+            console.log(title, description);
+
+            // Update url
             WriteActions.setUrlLink(url);
-            const image = client.image || 'https://www.bitcoin.co.id/homev2-assets/img/p2pbg.jpg';
+
+            // Update metadata
+            const image = client.image || null;
+
             WriteActions.setUrlMetadata({
                 title: client.title,
                 description: client.description,
                 image: image,
                 source: client.host
             });
+
+            // Update validity
             WriteActions.setUrlValidity({
                 valid: true,
                 message: null,
@@ -132,7 +163,6 @@ class MainRoute extends Component {
 
     handleUrlValidate = (url) => {
         const { WriteActions} = this.props;
-        console.log('url: ', url);
 
         if(validator.isURL(url)) {
             WriteActions.setUrlValidity({
@@ -153,7 +183,12 @@ class MainRoute extends Component {
         }
     }
 
-    handleRichSubmit = ({title, content}) => {
+    handleUrlNote = (note) => {
+        const { WriteActions} = this.props;
+        WriteActions.setUrlNote(note);
+    }
+
+    handleUrlSubmit = ({title, content}) => {
         console.log(title, content);
         // Save data
     }
@@ -161,7 +196,7 @@ class MainRoute extends Component {
 
     render () {
         const { mainHandler, handleWrite, handleRichEditor,
-             handleRichValidate, handleUrlValidate } = this;
+             handleRichValidate, handleUrlValidate, handleUrlNote, handleUrlSubmit } = this;
         const { status: { main, write } } = this.props;
 
         const sorterValue = main.getIn(['sorter', 'value']);
@@ -196,6 +231,7 @@ class MainRoute extends Component {
                                 onValidate={handleRichValidate}
                                 urlEditor={urlEditor}
                                 onUrlData={handleUrlValidate}
+                                onUrlNote={handleUrlNote}
                         />
                     </Write>
                 </CenterColumn>

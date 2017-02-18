@@ -8,26 +8,44 @@ import {
     Message
 } from 'semantic-ui-react';
 
+import { Link } from 'react-router'
+
+import debounce from 'lodash/debounce';
+
 
 class UrlEditor extends Component {
-    handleData = (e) => {
-        const value = e.target.value;
-        const { onChangeData } = this.props;
+    constructor(props) {
+        super(props);
 
-        onChangeData(value);
-
+        this.delayedNoteChange = debounce(this.delayedNoteChange, 100);
     }
 
+    handleChanageNote = (e) => {
+        e.persist();
+        this.delayedNoteChange(e);
+    }
+
+    delayedNoteChange = (e) => {
+        const { onChangeNote } = this.props;
+        onChangeNote(e.target.value);
+    }
+
+    handleChangeLink = (e) => {
+        const { onChangeData } = this.props;
+        onChangeData(e.target.value);
+
+    }
     render() {
-        const { editor, visible, validity, metadata } = this.props;
+        const { editor, visible, validity, metadata, link } = this.props;
 
         const fetching = validity.get('fetching');
         const fetched = validity.get('fetched');
         const valid = validity.get('valid');
         const message = validity.get('message');
 
+        const image = metadata.get('image');
 
-        const { handleData } = this;
+        const { handleChangeLink, handleChanageNote } = this;
 
         return(
             <div className={`url-editor ${editor==='url' ? 'active': ''}`}>
@@ -39,7 +57,7 @@ class UrlEditor extends Component {
                         labelPosition='right'
                         placeholder="페이지 주소를 넣어주세요"
                         loading={fetching}
-                        onChange={handleData}
+                        onChange={handleChangeLink}
                     />
                 </div>
                         <div className={`extra ${visible ? 'show':''}`}>
@@ -53,24 +71,38 @@ class UrlEditor extends Component {
                             {
                                 fetched && (
                                 <div>
-                                    <div className="description">
+                                    <div className="input-description">
                                         <Form>
                                              <TextArea
                                                 placeholder="링크에 대한 설명을 덧붙여주세요"
                                                 autoHeight
+                                                onChange={handleChanageNote}
                                             />
                                         </Form>
                                     </div>
                                     <div className="fetching-data">
-                                        <div className="wrapper">
-                                            <div className="summary">
-                                                <div className="text">
-                                                    {metadata.get('title')}
+
+                                        <Link to={link} target="_blank">
+                                            <div className="wrapper">
+                                                <div className={`title ${image?'':'no-image'}`}>
+                                                    <div className="text">
+                                                        {metadata.get('title')}
+                                                    </div>
+                                                    <div className="source">
+                                                        {metadata.get('source')}
+                                                    </div>
+                                                </div>
+                                                {
+                                                    image && (
+                                                        <div className="image" style={{backgroundImage: `url(${metadata.get('image')})`}}>
+                                                        </div>
+                                                    )
+                                                }
+                                                <div className="description">
+                                                    {metadata.get('description')}
                                                 </div>
                                             </div>
-                                            <div className="image" style={{backgroundImage: `url(${metadata.get('image')})`}}>
-                                            </div>
-                                        </div>
+                                        </Link>
                                     </div>
                                     <div className="footer">
                                         <Button color="teal" size="small"><Icon name='send' size='small'/>보내기</Button>

@@ -18,7 +18,6 @@ class RichEditor extends Component {
 
     delayedTitleChange = (e) => {
         const { onChangeTitle } = this.props;
-        console.log(e.target.value);
         onChangeTitle(e.target.value);
     }
 

@@ -13,6 +13,7 @@ const RICH_CONTENT_SET= 'write/RICH_CONTENT_SET';
 const RICH_VALIDATION_SET = 'write/RICH_VALIDATION_SET';
 
 const URL_LINK_SET = 'write/URL_LINK_SET';
+const URL_NOTE_SET = 'write/URL_NOTE_SET';
 const URL_METADATA_SET = 'write/URL_METADATA_SET';
 const URL_VALIDATION_SET = 'write/URL_VALIDATION_SET';
 
@@ -28,6 +29,7 @@ export const setRichContent = createAction(RICH_CONTENT_SET);
 export const setRichValidity = createAction(RICH_VALIDATION_SET);
 
 export const setUrlLink = createAction(URL_LINK_SET);
+export const setUrlNote = createAction(URL_NOTE_SET);
 export const setUrlMetadata = createAction(URL_METADATA_SET);
 export const setUrlValidity = createAction(URL_VALIDATION_SET);
 
@@ -47,6 +49,7 @@ const initialState = Map({
     }),
     urlEditor: Map({
         link: '페이지 주소를 넣어주세요',
+        note: null,
         validity: Map({
             fetching: false,
             valid: false,
@@ -57,7 +60,7 @@ const initialState = Map({
             title: '',
             description: '',
             image: '',
-            source: ''
+            source: '',
         }),
     })
 });
@@ -94,6 +97,10 @@ export default handleActions({
     [URL_LINK_SET]: (state, action) => {
         const value = action.payload;
         return state.setIn(['urlEditor', 'link'], value)
+    },
+    [URL_NOTE_SET]: (state, action) => {
+        const value = action.payload;
+        return state.setIn(['urlEditor', 'note'], value)
     },
     [URL_METADATA_SET]: (state, action) => {
         const { title, description, image, source } = action.payload;
