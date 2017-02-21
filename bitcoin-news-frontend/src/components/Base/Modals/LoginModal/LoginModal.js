@@ -52,13 +52,11 @@ class LoginModal extends Component {
                         </div>
                     </EyeCatchy>
                 </div>
-                // { visible && <Dimmer /> }
                 <Dimmer />
             </div>
         );
     }
 }
 
-// export { default as SocialLoginButton } from './SocialLoginButton';
 LoginModal.SocialLoginButton = SocialLoginButton;
 export default LoginModal;

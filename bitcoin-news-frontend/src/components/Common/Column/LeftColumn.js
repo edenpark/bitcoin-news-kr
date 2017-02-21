@@ -1,12 +1,10 @@
 import React from 'react';
-import { Grid } from 'semantic-ui-react';
 
 const LeftColumn = ({children}) => {
     return(
-        <Grid.Column>
+        <div className="left-column">
             {children}
-        </Grid.Column>
-
+        </div>
     );
 };
 

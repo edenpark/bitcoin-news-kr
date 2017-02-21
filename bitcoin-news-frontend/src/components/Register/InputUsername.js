@@ -16,7 +16,7 @@ class InputUsername extends Component {
                             content: '계속하기',
                             onClick,
                             disabled: error || value === '',
-                            loading: loading.claimUsername || loading.register
+                            loading: loading.register
                         }
                     }
                     placeholder="아이디"

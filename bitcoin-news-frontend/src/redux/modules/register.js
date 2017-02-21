@@ -5,7 +5,6 @@ import users from 'helpers/firebase/database/users';
 
 /* Actions */
 const USERNAME_CHECK = requize('register/USERNAME_CHECK');
-const USERNAME_CLAIM = requize('register/USERNAME_CLAIM');
 const REGISTER = requize('register/REGISTER');
 const SET_VALIDITY = 'register/SET_VALIDITY';
 
@@ -14,13 +13,6 @@ export const checkUsername = (username) => ({
     type: USERNAME_CHECK.DEFAULT,
     payload: {
         promise: users.checkUsername(username)
-    }
-});
-
-export const claimUsername = ({uid, username}) => ({
-    type: USERNAME_CLAIM.DEFAULT,
-    payload: {
-        promise: users.claimUsername({uid, username})
     }
 });
 
@@ -58,18 +50,6 @@ export default handleActions({
     [USERNAME_CHECK.REJECT]: (state, action) => {
         const error = action.payload;
         return reject(state, 'checkUsername', error);
-    },
-
-    // Claim username
-    [USERNAME_CLAIM.PENDING]: (state, action) => {
-        return pend(state, 'claimUsername');
-    },
-    [USERNAME_CLAIM.FULFILLED]: (state, action) => {
-        return fulfill(state, 'claimUsername');
-    },
-    [USERNAME_CLAIM.REJECT]: (state, action) => {
-        const error = action.payload;
-        return reject(state, 'claimUsername', error);
     },
 
     // Register

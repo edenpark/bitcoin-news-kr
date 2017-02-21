@@ -1,4 +1,5 @@
 import users from './users';
+import posts from './posts';
 
 // Modulize
 const databaseHelper = (() => {
@@ -6,6 +7,7 @@ const databaseHelper = (() => {
         initialize: (database) => {
             // Initialize each database helpers
             users.initialize(database);
+            posts.initialize(database);
         }
     }
 })();

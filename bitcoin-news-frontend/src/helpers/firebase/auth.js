@@ -17,7 +17,7 @@ const authHelper = (function() {
             return auth.signInWithPopup(providers[provider]);
         },
         logout: () => {
-            return firebase.auth().signOut()
+            return firebase.auth().signOut();
         },
         getExistingProvider: async (email) => {
             const exisitngProviders = await firebase.auth().fetchProvidersForEmail(email);

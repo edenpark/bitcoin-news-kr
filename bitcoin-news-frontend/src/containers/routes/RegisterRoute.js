@@ -70,7 +70,6 @@ class RegisterRoute extends Component {
 
 
         try {
-            await RegisterActions.claimUsername({uid, username});
 
             await RegisterActions.register({
                 uid,
@@ -185,7 +184,6 @@ RegisterRoute = connect(
             validation: state.register.get('validation'),
             loading: {
                 checkUsername: state.register.getIn(['requests', 'checkUsername', 'fetching']),
-                claimUsername: state.register.getIn(['requests', 'claimUsername', 'fetching']),
                 register: state.register.getIn(['request', 'register', 'fetching']),
             }
         },

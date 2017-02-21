@@ -49,6 +49,7 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "ent": "^2.2.0",
     "firebase": "^3.6.7",
     "franc": "^2.0.0",
     "google-translate": "^1.0.9",

@@ -9,12 +9,6 @@ const MODAL_CLOSE = "base/modal/MODAL_CLOSE";
 export const openModal = createAction(MODAL_OPEN);
 export const closeModal = createAction(MODAL_CLOSE);
 
-// export const closeModal = createAction(MODAL_CLOSE);
-// Above code is same as below:
-// const cloaseModal = (payload) => ({
-//     type: MODAL_CLOSE,
-//     payload
-// })
 
 /* initialState */
 const initialState = Map({
@@ -29,12 +23,6 @@ const initialState = Map({
 /* Creates multiple reducers */
 export default handleActions({
     [MODAL_OPEN]: (state, action) => {
-        /* Open modalName and set data by spread
-            {
-                ...modalName,
-                data
-            }
-        */
         const { modalName, data } = action.payload;
 
         return state.mergeIn([modalName], {
@@ -42,14 +30,6 @@ export default handleActions({
             ...data
         })
 
-        //Above same as below:
-        // return {
-        //     ...state,
-        //     [modalName]: {
-        //         ...state.login,
-        //         open: true
-        //     }
-        // }
     },
     [MODAL_CLOSE]: (state, action) => {
         // Get modal name and hide

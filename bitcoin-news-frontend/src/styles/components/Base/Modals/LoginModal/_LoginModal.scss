@@ -58,4 +58,9 @@
             animation-fill-mode: both;
         }
     }
+    @include media("<tablet") {
+        .login-modal {
+            width: 100%;
+        }
+    }
 }

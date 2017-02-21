@@ -1,98 +1,66 @@
 import React, { Component } from 'react';
+
 import Main, {
     LeftColumn,
     CenterColumn,
     RightColumn,
-    Sorter,
-    Favorite,
-    ButtonSet,
     Write,
-    EditorSelector,
-    Editor
+    Editor,
+    Posts,
+    Post
 } from 'components/Main/Main';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as main from 'redux/modules/main';
-import * as write from 'redux/modules/write';
+import * as modal from 'redux/modules/base/modal';
+import * as editor from 'redux/modules/editor';
+import * as posts from 'redux/modules/posts';
 
+import { Loader, Button, Message } from 'semantic-ui-react'
 import MetaInspector from 'node-metainspector';
 import validator from 'validator';
-// import franc from 'franc';
-// var googleTranslate = require('google-translate')('AIzaSyDn87dgXOFWk-yJ9SM2-VvU2Tg9zrP4Jtc');
+
 import translate from 'helpers/translate';
+
+import postsHelper from 'helpers/firebase/database/posts';
 
 
 class MainRoute extends Component {
 
-    mainHandler = (() => {
-        const { MainActions } = this.props;
+    componentDidMount() {
+        this.onPostsUpdate();
+    }
 
-        return {
-            setSorter: (value) => {
-                MainActions.setSorter(value);
-            }
-        }
-    })()
+    // componentWillReceiveProps(nextProps) {
+    //     const { posts : { pageNum } } = this.props;
+    //     console.log('pageNum-', pageNum);
+    //
+    //     if (isNaN(pageNum) || pageNum < 1) {
+    //         // this.history.pushState(null, '/404');
+    //         return;
+    //     }
+    //
+    //     Actions.stopWatchingPosts();
+    //     Actions.watchPosts(pageNum);
+    // }
 
-    handleWrite = (() => {
-        const { WriteActions } = this.props;
+    handleEditor = (() => {
+        const { EditorActions } = this.props;
         return {
             open: () => {
-                WriteActions.showWrite();
+                EditorActions.showEditor();
             },
             close: () => {
-                WriteActions.hideWrite();
-            },
-            richEditor: () => {
-                WriteActions.richEditor();
-            },
-            urlEditor: () => {
-                WriteActions.urlEditor();
+                EditorActions.hideEditor();
             }
         }
     })()
 
-
-    handleRichEditor = (() => {
-        const { WriteActions } = this.props;
-
-        return {
-            changeTitle: (title) => {
-                WriteActions.setRichTitle(title);
-            },
-            changeContent: (value) => {
-                WriteActions.setRichContent(value);
-            }
-        }
-    })()
-
-    handleRichValidate = ({title, content}) => {
-        const { WriteActions } = this.props;
-        const { handleRichSubmit } = this;
-
-        if(title && content) {
-            WriteActions.setRichValidity({
-                valid: true,
-                message: ''
-            })
-            return handleRichSubmit({title, content});
-        }
-        return WriteActions.setRichValidity({
-            valid: false,
-            message: '제목과 내용 모두 입력해주세요'
-        })
-    }
-
-    handleRichSubmit = ({title, content}) => {
-        console.log(title, content);
-        // Save data
-    }
-
-    handleUrlData = async (url) => {
+    handleEditorData = async (url) => {
         /* This is for testing google translation without CROS
 
-        const { WriteActions } = this.props;
+        const { EditorActions } = this.props;
 
         const orgTitle = 'EU Proposes Storing Personal Data From Digital Currency E-Commerce In The Union';
         const orgDescription = 'A Committee of the European Parliament has proposed an amendment which includes e-commerce transactions using digital currencies, including bitcoin.';
@@ -103,8 +71,8 @@ class MainRoute extends Component {
 
         const { title, description } = translateResult;
 
-        WriteActions.setUrlLink(url);
-        WriteActions.setUrlMetadata({
+        EditorActions.setEditorLink(url);
+        EditorActions.setEditorMetadata({
             title: title,
             description: description,
             image: image,
@@ -112,7 +80,7 @@ class MainRoute extends Component {
         });
 
         // Update validity
-        WriteActions.setUrlValidity({
+        EditorActions.setEditorValidity({
             valid: true,
             message: null,
             fetching: false,
@@ -121,59 +89,77 @@ class MainRoute extends Component {
 
         */
 
-        const { WriteActions } = this.props;
-        const client = new MetaInspector(url, { timeout: 50000});
-
-        client.on('fetch', async () => {
-            const translateResult = await translate(client.title, client.description);
-            const { title, description } = translateResult;
-            console.log(title, description);
-
-            // Update url
-            WriteActions.setUrlLink(url);
-
-            // Update metadata
-            const image = client.image || null;
-
-            WriteActions.setUrlMetadata({
-                title: client.title,
-                description: client.description,
-                image: image,
-                source: client.host
-            });
-
-            // Update validity
-            WriteActions.setUrlValidity({
-                valid: true,
-                message: null,
-                fetching: false,
-                fetched: true
-            });
-        }).on("error", function(err){
-            // Show error message
-            WriteActions.setUrlValidity({
-                valid: false,
-                message: '오류가 발생했습니다. 다시 시도해주세요',
-                fetching: false,
-                fetched: false
-            });
+        const { EditorActions } = this.props;
+        // const client = new MetaInspector(url, { timeout: 50000});
+        //
+        // client.on('fetch', async () => {
+        //     const translateResult = await translate(client.title, client.description);
+        //     const { title, description } = translateResult;
+        //     console.log(title, description);
+        //
+        //     // Update url
+        //     EditorActions.setEditorLink(url);
+        //
+        //     // Update metadata
+        //     const image = client.image || null;
+        //
+        //     EditorActions.setEditorMetadata({
+        //         title: client.title,
+        //         description: client.description,
+        //         image: image,
+        //         source: client.host
+        //     });
+        //
+        //     // Update validity
+        //     EditorActions.setEditorValidity({
+        //         valid: true,
+        //         message: null,
+        //         fetching: false,
+        //         fetched: true
+        //     });
+        // }).on("error", function(err){
+        //     // Show error message
+        //     EditorActions.setEditorValidity({
+        //         valid: false,
+        //         message: '오류가 발생했습니다. 다시 시도해주세요',
+        //         fetching: false,
+        //         fetched: false
+        //     });
+        // });
+        // client.fetch();
+        const title = '구글, iOS용 &#8216;크롬&#8217; 오픈소스로 공개';
+        const description = '구글이 iOS용 &#039;크롬&#039; 앱을 오픈소스 기술로 1월31일 공개했다. 크롬은 구글의 오픈소스 웹 기술 &#039;크로미엄&#039; 프로젝트를 기반으로 만든 웹브라우저다. 과거 구글은 애플이 만든 오픈소스 웹브라우저 엔진 &#039;웹킷&#039;을 활용해 크롬을 만들었으나 2013년부터 웹킷을 버리고 독자적인 웹브라우저 엔진 &#039;&#039;를 개발해 크롬에 적용하고 있다. PC용 크롬은 주로 블링크 기반으로 개발됐으나, iOS용 크롬만큼은 그 플랫폼 특징상 웹킷과 블링크를 둘다 지원해야 했다. 구글은 &quot;iOS 플랫폼이 가진 제한 때문에 모든 웹브라우저는 웹킷 렌더링 엔진을 이용해야 했다&quot;라며 &quot;이 과정에서 복잡성이 추가돼 소스코드를 공개하고 싶지 않았다&quot;라고 iOS용 크롬만 오픈소스 기술이 아니었던 이유를 밝혔다. 이번 공개로 크롬은 안드로이드, 맥, 윈도우, 리눅스, 크롬OS 버전과 더불어 iOS용 크롬까지 모두 소스코드가 공개됐으며, 앞으로 오류 및 개선사항 등 외부 피드백을 더 쉽게 받을 수 있게 됐다. 구글은 공식 블로그를 통해 &quot;향후 크롬 관련 개발 속도는 더욱 빨라질 것&quot;이라고 밝혔다. &lt;더버지&gt;는 &quot;앞으로 크롬 iOS 기술을 기반으로 한 새로운 iOS 웹브라우저도 볼 수 있을 것&quot;이라고 기대했다. 크로미엄 프로젝트 공식 홈페이지 iOS용 크롬 소스코';
+        const source = 'www.bloter.net';
+        EditorActions.setEditorLink(url);
+        EditorActions.setEditorMetadata({
+            title: title,
+            description: description,
+            image: null,
+            source: source
         });
-        client.fetch();
+
+        // Update validity
+        EditorActions.setEditorValidity({
+            valid: true,
+            message: null,
+            fetching: false,
+            fetched: true
+        });
     }
 
-    handleUrlValidate = (url) => {
-        const { WriteActions} = this.props;
+    handleEditorValidate = (url) => {
+        const { EditorActions} = this.props;
 
         if(validator.isURL(url)) {
-            WriteActions.setUrlValidity({
+            EditorActions.setEditorValidity({
                 valid: true,
                 message: null,
                 fetching: true,
                 fetched: false
             });
-            this.handleUrlData(url);
+            this.handleEditorData(url);
         } else {
-            WriteActions.setUrlValidity({
+            EditorActions.setEditorValidity({
                 valid: false,
                 message: '유효한 URL이 아닙니다',
                 fetching: false,
@@ -183,60 +169,142 @@ class MainRoute extends Component {
         }
     }
 
-    handleUrlNote = (note) => {
-        const { WriteActions} = this.props;
-        WriteActions.setUrlNote(note);
+    handleEditorNote = (note) => {
+        const { EditorActions} = this.props;
+        EditorActions.setEditorNote(note);
     }
 
-    handleUrlSubmit = ({title, content}) => {
-        console.log(title, content);
-        // Save data
+    handleEditorTitle = (title) => {
+        const { EditorActions} = this.props;
+        EditorActions.changeEditorTitle(title);
+    }
+
+    handleEditorDescription = (description) => {
+        const { EditorActions} = this.props;
+        EditorActions.changeEditorDescription(description);
+    }
+
+    handleEditorSubmit = () => {
+        const { EditorActions, status: { auth, editor } } = this.props;
+        EditorActions.submittingEditorPost();
+
+        const { title, description, source } = editor.get('metadata');
+        const user = auth.get('user');
+        const post = {
+            creatorUID: user.uid,
+            creator: auth.getIn(['profile', 'username']),
+            title: title,
+            description: description,
+            source: source,
+            link: editor.get('link'),
+            note: editor.get('note'),
+            time: Date.now()
+        };
+        const submitPost = EditorActions.submitEditorPost(post);
+        const initializeEditor = EditorActions.initializeEditor();
+        const updatePosts = this.onPostsUpdate();
+
+        Promise.all([submitPost, initializeEditor, updatePosts]);
+    }
+
+    onPostsUpdate = async () => {
+        const { PostsActions, posts } = this.props;
+        const pageNum = posts.get('pageNum');
+        const data = await postsHelper.watchPosts(pageNum);
+        PostsActions.updatePostStore(data);
+    }
+
+    handlePostLoad = async () => {
+        const { PostsActions, posts } = this.props;
+        const pageNum = posts.get('pageNum');
+
+        await PostsActions.setPageNum(pageNum + 1);
+        this.onPostsUpdate();
+    }
+
+    openLoginModal = () => {
+        const { ModalActions } = this.props;
+        ModalActions.openModal({modalName: 'login'});
     }
 
 
     render () {
-        const { mainHandler, handleWrite, handleRichEditor,
-             handleRichValidate, handleUrlValidate, handleUrlNote, handleUrlSubmit } = this;
-        const { status: { main, write } } = this.props;
+        const { mainHandler, handleEditor, handleEditorValidate,
+            handleEditorNote, handleEditorSubmit, handlePostLoad,
+            handleEditorTitle, handleEditorDescription, openLoginModal } = this;
 
-        const sorterValue = main.getIn(['sorter', 'value']);
+        const { status: { main, editor, auth }, posts } = this.props;
+        const postList = posts.get('posts');
 
-        const showWrite = write.getIn(['main', 'visible']);
-        const activeEditor = write.getIn(['main', 'editor']);
+        const nextPage = posts.get('nextPage');
+        const currentPage = posts.get('currentPage');
+        const loading = posts.get('loading');
 
-        const richEditor = write.getIn(['richEditor']);
-        const urlEditor = write.getIn(['urlEditor']);
+        const visibleEditor= editor.get('visible');
+        const Submitting= editor.get('Submitting');
+
+        const postEls = postList.size
+            ? postList.map((post) =>
+                (
+                    <Post post={ post }
+                          user={ auth }
+                          key={ post.get('id') }
+                    />
+                )
+            )
+            : 'There are no posts yet!';
+
+
 
         return (
             <Main>
                 <LeftColumn>
-                    <Sorter value={sorterValue} onSelect={mainHandler.setSorter}/>
-                    <Favorite />
-                    <ButtonSet />
+                    Left
                 </LeftColumn>
                 <CenterColumn>
-                    <Write visible={showWrite}
-                            onHide={handleWrite.close}
-                            onShow={handleWrite.open}>
-                        <EditorSelector activeEditor={activeEditor}
-                            visible={showWrite}
-                            onRichEditor={handleWrite.richEditor}
-                            onUrlEditor={handleWrite.urlEditor}
-                        />
-                        <Editor activeEditor={activeEditor}
-                                visible={showWrite}
-                                richEditor={richEditor}
-                                onRichTitle={handleRichEditor.changeTitle}
-                                onRichContent={handleRichEditor.changeContent}
-                                onValidate={handleRichValidate}
-                                urlEditor={urlEditor}
-                                onUrlData={handleUrlValidate}
-                                onUrlNote={handleUrlNote}
-                        />
+                    <Write visible={visibleEditor}
+                        onHide={handleEditor.close}
+                        onShow={handleEditor.open}>
+                        <Editor visible={visibleEditor}
+                            editor={editor}
+                            user={auth.get('profile')}
+                            onValidate={handleEditorValidate}
+                            onChangeNote={handleEditorNote}
+                            onChangeTitle={handleEditorTitle}
+                            onChangeDescription={handleEditorDescription}
+                            onSubmit={handleEditorSubmit}
+                            openLoginModal={openLoginModal}
+                            />
                     </Write>
+                    <Posts>
+                        {
+                            loading || Submitting ?
+                                <Loader active inline="centered"/>
+                                : postEls
+                        }
+                    </Posts>
+                    <div className="loadmore-wrapper">
+                    {
+                        nextPage ?
+                                <Button color="pink"
+                                        size="small"
+                                        onClick={handlePostLoad}
+                                >
+                                    더 읽기
+                                </Button>
+                            :     <Message
+                                    icon='smile'
+                                    header='끝까지 다 읽으셨습니다'
+                                    content='여기까지 읽어주셔서 감사합니다!'
+                                    color="pink"
+                                    size="small"
+                                  />
+
+                    }
+                    </div>
                 </CenterColumn>
                 <RightColumn>
-                    3
+                    Right
                 </RightColumn>
             </Main>
         )
@@ -247,12 +315,17 @@ MainRoute = connect(
     state => ({
         status: {
             main: state.main,
-            write: state.write
-        }
+            editor: state.editor,
+            auth: state.base.auth,
+            modal: state.base.modal
+        },
+        posts: state.posts
     }),
     dispatch => ({
         MainActions: bindActionCreators(main, dispatch),
-        WriteActions: bindActionCreators(write, dispatch)
+        EditorActions: bindActionCreators(editor, dispatch),
+        PostsActions: bindActionCreators(posts, dispatch),
+        ModalActions: bindActionCreators(modal, dispatch)
     })
 )(MainRoute);
 

@@ -10,49 +10,36 @@ const usersHelper = (() => {
 
         /* Find */
         findProfileById: (uid) => {
-            return users.child('profiles').child(uid).once('value');
+            return users.child(uid).child('profile').once('value');
         },
 
         findProfileByIdSync: (uid, callback) => {
-            const ref = users.child('profiles').child(uid);
+            const ref = users.child(uid).child('profile');
             ref.on('value', callback)
             return ref;
         },
 
-        findSettingById: (uid) => {
-            return users.child('settings').child(uid).once('value');
-        },
-
-        findSettingByUsername: (username) => {
-            return users.child('settings').orderByChild('username')
-                                        .equalTo(username)
-                                        .once('child_added');
-        },
-
         checkUsername: async (username) => {
-            const data = await users.child('usernames').child(username).once('value');
+            // const data = await users.child('usernames').child(username).once('value');
+            const data = await users.orderByChild('usernames').equalTo(username).once('value');
             return { available: !data.exists() };
         },
 
         /* Update */
 
         /* Create */
-        claimUsername: ({uid, username}) => {
-            return users.child('usernames').child(username).set(uid);
-        },
-
         create: ({uid, username, displayName, email, thumbnail}) => {
-            const profiles = users.child('profiles').child(uid).set({
+            const profile = users.child(uid).child('profile').set({
                 username,
                 displayName,
-                thumbnail: 'https://firebasestorage.googleapis.com/v0/b/bitcoin-news-kr.appspot.com/o/static%2FBNK_user_icon.jpg?alt=media&token=c6ec960c-596f-4e3c-976e-366af723b4f6',
+                thumbnail: thumbnail || 'https://firebasestorage.googleapis.com/v0/b/bitcoin-news-kr.appspot.com/o/static%2FBNK_user_icon.jpg?alt=media&token=c6ec960c-596f-4e3c-976e-366af723b4f6',
             });
 
-            const settings = users.child('settings').child(uid).set({
+            const setting = users.child(uid).child('setting').set({
                 email
             });
 
-            return Promise.all([profiles, settings, username]);
+            return Promise.all([profile, setting]);
 
         }
     }

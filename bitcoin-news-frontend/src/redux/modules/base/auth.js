@@ -5,9 +5,13 @@ import { Map } from 'immutable';
 const AUTHENTICATE = 'auth/AUTHENTICATE';
 const PROFILE_SYNC = 'auth/PROFILE_SYNC';
 
+const LOGOUT = 'auth/LOGOUT';
+
 /* action creators */
 export const authenticate = createAction(AUTHENTICATE);
 export const syncProfile = createAction(PROFILE_SYNC);
+
+export const logout = createAction(LOGOUT);
 
 /* initialState */
 const initialState = Map({
@@ -17,7 +21,7 @@ const initialState = Map({
         displayName: null,
         thumbnail: null
     }),
-    profileSynced: false
+    profileSynced: false,
 });
 
 /* reducers */
@@ -40,6 +44,17 @@ export default handleActions({
         return state.merge({
             profile,
             profileSynced: true
+        });
+    },
+    [LOGOUT]: (state, action) => {
+        return state.merge({
+            user: null,
+            profile: Map({
+                username: null,
+                displayName: null,
+                thumbnail: null
+            }),
+            profileSynced: false
         });
     }
 }, initialState);

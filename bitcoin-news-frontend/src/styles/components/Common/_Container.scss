@@ -1,6 +1,6 @@
 .container {
     &.common {
-        margin: 0 auto;
+        margin: 3rem auto 0;
         width: 1000px;
 
         @include media(">wide-desktop") {
@@ -9,8 +9,9 @@
 
         @include media("<desktop") {
             width: 100%;
+            padding: 0 1rem;
         }
-        
+
     }
 
 }

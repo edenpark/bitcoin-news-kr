@@ -48,7 +48,7 @@ class App extends Component {
         // Listner to verify an account
         auth.authStateChanged(
             async (firebaseUser) => {
-                console.log(firebaseUser);
+
                 // Stop syncing exsiting profile
                 if(this.profileRef) {
                     this.profileRef.off();
@@ -62,7 +62,6 @@ class App extends Component {
                         const profile = snapshot.val();
 
                         // Sync the profile
-                        console.log(profile);
                         AuthActions.syncProfile(profile);
 
                         // Store the profile to the localStorage
@@ -76,7 +75,6 @@ class App extends Component {
     }
 
     handleAuth = async (provider) => {
-
         this.handleModal.close('login');
 
         try {
@@ -84,7 +82,6 @@ class App extends Component {
             // Check if it's exisiting user
             const uid = loginData.user.uid;
             const profile = await users.findProfileById(uid);
-
             if(!profile.exists()) {
                 this.context.router.push('/register');
             }
@@ -132,7 +129,7 @@ class App extends Component {
             },
             close: () => {
                 HeaderActions.closeUserMenu();
-            },
+            }
         }
     })()
 
@@ -145,9 +142,17 @@ class App extends Component {
         this.handleModal.close('linkAccount');
     }
 
+    handleLogOut = () => {
+        const { AuthActions, HeaderActions } = this.props;
+        auth.logout();
+        storage.remove('profile');
+        AuthActions.logout();
+        HeaderActions.closeUserMenu();
+    }
+
     render() {
         const { children, status: { modal, profile, header } } = this.props;
-        const { handleModal, handleAuth, handleLinkAccount, handleUserMenu } = this;
+        const { handleModal, handleAuth, handleLinkAccount, handleUserMenu, handleLogOut } = this;
 
         return(
             <div>
@@ -160,7 +165,12 @@ class App extends Component {
                                        onClick={handleUserMenu.open}/>
                         :  <AuthButton onClick={() => handleModal.open({modalName: 'login'})}/>
                     }
-                    <UserMenu visible={header.getIn(['userMenu', 'open'])} onHide={handleUserMenu.close}/>
+                    <UserMenu
+                        visible={header.getIn(['userMenu', 'open'])}
+                        onHide={handleUserMenu.close}
+                        profile={profile}
+                        onLogOut={handleLogOut}
+                    />
                 </Header>
                 <LoginModal visible={modal.getIn(['login', 'open'])}
                             onHide={() => handleModal.close('login')}>
