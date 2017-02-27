@@ -12,8 +12,8 @@ import configureStore from 'redux/configureStore';
 firebaseHelper.initialize();
 
 const store = configureStore();
-
 const rootElement = document.getElementById('root')
+
 
 ReactDOM.render(
     <Root store={store}

@@ -23,11 +23,10 @@ const initialState = Map({
 /* Creates multiple reducers */
 export default handleActions({
     [MODAL_OPEN]: (state, action) => {
-        const { modalName, data } = action.payload;
+        const { modalName } = action.payload;
 
         return state.mergeIn([modalName], {
             open: true,
-            ...data
         })
 
     },

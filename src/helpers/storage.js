@@ -5,7 +5,12 @@ storage.set = (key, object) => {
 }
 
 storage.get = (key) => {
-    if(!localStorage[key]) {
+    /*
+       typeof localStorage === "undefined"
+
+       is for server side to pass an error of 'localStorage is undefined'
+    */
+    if(typeof localStorage === "undefined" || !localStorage[key]) {
         return undefined;
     }
     return JSON.parse(localStorage[key]);

@@ -23,6 +23,8 @@ import users from 'helpers/firebase/database/users';
 
 import storage from 'helpers/storage';
 
+// import 'styles/main.scss';
+
 class App extends Component {
 
     static contextTypes = {
