@@ -17,5 +17,6 @@ export { default as CenterColumn } from 'components/Common/Column/CenterColumn';
 export { default as RightColumn } from 'components/Common/Column/RightColumn';
 
 export { default as Post } from './Post';
+export { default as PostDeleted } from './PostDeleted';
 
 export default SinglePost;

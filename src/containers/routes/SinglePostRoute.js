@@ -4,7 +4,8 @@ import SinglePost, {
     LeftColumn,
     CenterColumn,
     RightColumn,
-    Post
+    Post,
+    PostDeleted
 } from 'components/SinglePost/SinglePost';
 
 import { bindActionCreators } from 'redux';
@@ -28,6 +29,10 @@ class SinglePostRoute extends Component {
         router: React.PropTypes.object
     }
 
+    state = {
+        isDeletedPost: false
+    }
+
     componentDidMount() {
         const { handlePostLoad } = this;
         const { FormActions } = this.props;
@@ -43,8 +48,14 @@ class SinglePostRoute extends Component {
         const { SinglePostActions } = this.props;
         const data = await postsHelper.watchPost(postId);
         console.log(data);
-        if((data && data.post.isDeleted) || !data) {
+        if(!data) {
             this.context.router.push('/404');
+            return;
+        }
+        if(data && data.post.isDeleted) {
+            this.setState({
+                isDeletedPost: true
+            });
             return;
         }
         SinglePostActions.loadSinglePost(data);
@@ -83,6 +94,13 @@ class SinglePostRoute extends Component {
             postId: itemId
         });
         SinglePostActions.updateUpvotePost(upvotes-1);
+    }
+
+    deletePost = (post) => {
+        const { username } = this.props.params;
+        postsHelper.delete(post);
+
+        this.context.router.push('/');
     }
 
     addComment = (comment) => {
@@ -150,10 +168,11 @@ class SinglePostRoute extends Component {
     render () {
         const { single, auth, form } = this.props;
         const post = single.get('post');
-        const { upvotePost, downvotePost, openLoginModal,
+        const { upvotePost, downvotePost, deletePost, openLoginModal,
                 addComment, deleteComment, changeCommentForm,
                 upvoteComment, downvoteComment } = this;
         const { postId }  = this.props.params;
+        const { isDeletedPost } = this.state;
 
         return (
             <SinglePost>
@@ -175,6 +194,11 @@ class SinglePostRoute extends Component {
                 </LeftColumn>
                 <CenterColumn>
                     {
+                        isDeletedPost && (
+                            <PostDeleted />
+                        )
+                    }
+                    {
                         single.get('loaded') ?
                         (
                             <Post
@@ -184,6 +208,7 @@ class SinglePostRoute extends Component {
                                 key={postId}
                                 upvote={ upvotePost }
                                 downvote={ downvotePost }
+                                deletePost={ deletePost }
                                 upvoteComment={ upvoteComment }
                                 downvoteComment={ downvoteComment }
                                 openLoginModal={openLoginModal}
@@ -194,7 +219,7 @@ class SinglePostRoute extends Component {
                                 />
                         ) :
                         (
-                            <Loader active inline='centered' />
+                            !isDeletedPost && <Loader active inline='centered' />
                         )
                     }
                 </CenterColumn>

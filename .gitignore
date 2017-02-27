@@ -4,8 +4,7 @@
 node_modules
 
 # production
-# build
-server/lib
+build
 
 # misc
 .DS_Store

@@ -4,14 +4,12 @@
   "private": true,
   "devDependencies": {
     "autoprefixer": "6.5.1",
-    "babel-cli": "^6.23.0",
     "babel-core": "6.17.0",
     "babel-eslint": "7.1.1",
     "babel-jest": "17.0.2",
     "babel-loader": "6.2.7",
-    "babel-plugin-transform-class-properties": "^6.23.0",
+    "babel-preset-es2015": "^6.22.0",
     "babel-preset-react-app": "^2.0.1",
-    "babel-preset-stage-2": "^6.22.0",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
     "chalk": "1.1.3",
     "connect-history-api-fallback": "1.3.0",
@@ -78,10 +76,10 @@
     "validator": "^6.2.1"
   },
   "scripts": {
-    "dev": "node scripts/start.js",
+    "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "start": "node server"
+    "deploy": "npm run build && mv build/index.html build/200.html && surge build teletobit.surge.sh"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -114,16 +112,5 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "description": "",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/edenpark/bitcoin-news-kr.git"
-  },
-  "author": "Eden Park",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/edenpark/bitcoin-news-kr/issues"
   }
 }

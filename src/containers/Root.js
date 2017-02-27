@@ -8,7 +8,7 @@ class Root extends Component {
         const { store, history } = this.props;
         return(
             <Provider store={store}>
-                <Router routes={routes} history={history} />
+                <Router routes={routes} history={history} createElement={this.createElement}/>
             </Provider>
         );
     }

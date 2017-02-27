@@ -23,8 +23,8 @@ const profileHelper = (() => {
 
         async getUserId(username) {
             const userObj = await usersRef.orderByChild('profile/username').equalTo(username).once('value');
-
-            if(!userObj) {
+            
+            if(!userObj.val()) {
                 return false;
             }
             return Object.keys(userObj.val())[0]

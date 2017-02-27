@@ -3,14 +3,15 @@ import PostInfo from 'components/Main/Post/PostInfo';
 import PostLink from './PostLink';
 import CommentForm from './CommentForm';
 import CommentEle from './CommentEle';
-import { Header } from 'semantic-ui-react'
+import PostDeleted from './PostDeleted';
+import { Header } from 'semantic-ui-react';
 
 
 class Post extends Component {
 
     render() {
-        const { user, post, comments, upvote, downvote, commentForm,
-                upvoteComment, downvoteComment,
+        const { user, post, comments, upvote, downvote, deletePost,
+                commentForm, upvoteComment, downvoteComment,
                 openLoginModal, addComment, deleteComment,
                 changeCommentForm } = this.props;
 
@@ -37,6 +38,7 @@ class Post extends Component {
                     user={user}
                     onUpvote={upvote}
                     onDownvote={downvote}
+                    deletePost={deletePost}
                     openLoginModal={openLoginModal}
                     hidePostCommentLink={true}
                     />

@@ -30,12 +30,15 @@ class UrlEditor extends Component {
     }
 
     handleChangeLink = (e) => {
-        const { user, openLoginModal, onValidate } = this.props;
+        const { user, openLoginModal, onValidate, onChangeLink } = this.props;
+
+        onChangeLink(e.target.value);
+        
         if(!user.get('username')) {
             openLoginModal();
             return;
         }
-
+        onValidate(e.target.value);
     }
 
     handleSubmit = (e) => {
@@ -56,7 +59,6 @@ class UrlEditor extends Component {
         const { editor, visible } = this.props;
         const { fetching, fetched, valid, message } = editor.get('validity');
         const { title, description, source } = editor.get('metadata');
-        const link = editor.get('link');
 
         return(
             <div className="url-editor">
@@ -67,7 +69,7 @@ class UrlEditor extends Component {
                         iconPosition='left'
                         labelPosition='right'
                         placeholder="공유 할 페이지 주소를 넣어주세요. 한국어로 번역이 됩니다."
-                        value={link}
+                        value={editor.get('link')}
                         loading={fetching}
                         onChange={handleChangeLink}
                     />

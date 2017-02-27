@@ -6,7 +6,7 @@ class BandLogo extends React.Component {
     render() {
         return (
             <div className="brand-logo">
-                <Link to='/'>BitcoinNewsKR</Link>
+                <Link to='/'>teletobit</Link>
             </div>
         );
     }

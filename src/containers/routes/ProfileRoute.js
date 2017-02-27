@@ -57,7 +57,6 @@ class ProfileRoute extends Component {
         const { ProfileActions } = this.props;
 
         const userId = await profileHelper.getUserId(username);
-
         if(!userId) {
             return this.context.router.push('/404');
         }
@@ -73,9 +72,10 @@ class ProfileRoute extends Component {
     }
 
     deletePost = (post) => {
+        const { username } = this.props.params;
         postsHelper.delete(post);
 
-        this.loadProfile();
+        this.loadProfile(username);
     }
 
     openLoginModal = () => {
@@ -155,9 +155,11 @@ class ProfileRoute extends Component {
     }
 
     deleteComment = (comment) => {
+        const { username } = this.props.params;
+
         commentsHelper.deleteComment(comment);
 
-        this.loadProfile();
+        this.loadProfile(username);
     }
 
     render() {
