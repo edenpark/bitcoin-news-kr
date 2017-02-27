@@ -87,8 +87,7 @@
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "start": "NODE_ENV=production node server",
-    "server-build": "NODE_ENV=production babel server/lib -d server --presets react-app"
+    "start": "node server"
   },
   "jest": {
     "collectCoverageFrom": [

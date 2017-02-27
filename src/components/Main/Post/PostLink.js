@@ -10,7 +10,7 @@ const PostLink = ({ post }) => {
                     {decode(post.get('title'))}
                 </div>
                 <span className="post-source">
-                    <a href={`//${post.get('source')}`}>{ post.get('source') }</a>
+                    { post.get('source') }
                 </span>
             </div>
         </Link>
@@ -18,3 +18,5 @@ const PostLink = ({ post }) => {
 };
 
 export default PostLink;
+
+// <a href={`//${post.get('source')}`}>{ post.get('source') }</a>

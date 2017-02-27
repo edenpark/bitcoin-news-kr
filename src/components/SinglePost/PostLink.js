@@ -12,10 +12,13 @@ const PostLink = ({ post }) => {
                 { decode(post.get('description')) }
             </div>
             <span className="post-source">
-                <b>원문 읽기</b> <a href={`//${post.get('source')}`}>{ post.get('source') }</a>
+                <b>원문 읽기</b>
             </span>
         </div>
     );
 };
 
 export default PostLink;
+
+
+ // <LinK to={`//${post.get('source')}`}>{ post.get('source') }</Link>
