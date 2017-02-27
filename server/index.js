@@ -1,9 +1,5 @@
 'use strict';
 
-var _jsxFileName = 'server/lib/index.js';
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 var PORT = process.env.PORT || 9000;
 
 require('import-export');
@@ -69,19 +65,8 @@ app.get('*', function (req, res) {
                     // const ReactApp = renderToString(react.createElement(RouterContext, renderProps));
                     var ReactApp = renderToString(React.createElement(
                         Provider,
-                        _defineProperty({ store: store, __source: {
-                                fileName: _jsxFileName,
-                                lineNumber: 65
-                            },
-                            __self: undefined
-                        }, '__self', undefined),
-                        React.createElement(RouterContext, Object.assign({}, renderProps, _defineProperty({
-                            __source: {
-                                fileName: _jsxFileName,
-                                lineNumber: 66
-                            },
-                            __self: undefined
-                        }, '__self', undefined)))
+                        { store: store },
+                        React.createElement(RouterContext, renderProps)
                     ));
 
                     var RenderedApp = htmlData.replace('{{SSR}}', ReactApp);
