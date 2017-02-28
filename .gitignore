@@ -5,8 +5,12 @@ node_modules
 
 # production
 build
+asset-manifest.json
 
 # misc
 .DS_Store
 .env
 npm-debug.log
+
+# surge.sh
+*
