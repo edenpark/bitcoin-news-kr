@@ -32,6 +32,16 @@ const UserMenu = ({profile, visible, onHide, onLogOut}) => {
                                     <Icon name="power"/><span>로그아웃</span>
                                 </div>
                             </div>
+                            {
+                                profile.get('permission') &&
+                                <div className="menu-item">
+                                    <div className="menu-name">
+                                        <Link to='/admin'  onClick={onHide}>
+                                            <Icon name="setting"/><span>관리자 페이지</span>
+                                        </Link>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </EyeCatchy>

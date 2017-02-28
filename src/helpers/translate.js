@@ -4,18 +4,16 @@ var googleTranslate = require('google-translate')('AIzaSyDn87dgXOFWk-yJ9SM2-VvU2
 
 const translate = (title, description) => {
 
-    var inputLocale = franc(title);
-
-    if(inputLocale === 'und' && description) {
-        inputLocale = franc(description);
-    }
+    var inputLocale = franc(description);
+    console.log('description=>', description);
+    console.log("inputLocale: ", inputLocale);
 
     if(inputLocale !== 'kor' && inputLocale !== 'und') {
 
         // Translate data if locale is not 'korean' or undetective language
         return new Promise( function(resolve, reject ) {
             googleTranslate.translate([title, description], 'ko', function(err, translations) {
-
+                console.log(translations);
                 title = translations[0].translatedText;
                 description = translations[1].translatedText;
 

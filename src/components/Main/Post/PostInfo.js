@@ -50,6 +50,8 @@ class PostInfo extends Component {
                 <PostCreatorLink creator={ post.get('creator') } />
                 <span className="post-info-item">·</span>
                 <PostTimeAgo time={post.get('time')} />
+                <span className="post-info-item">·</span>
+                <span className="post-info-item">{post.get('views')||0}</span>
                 { !hidePostCommentLink &&
                     <PostCommentsLink post={post} />
                 }

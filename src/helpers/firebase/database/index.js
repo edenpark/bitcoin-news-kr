@@ -2,6 +2,7 @@ import users from './users';
 import posts from './posts';
 import comments from './comments';
 import profile from './profile';
+// import feed from './feed';
 
 // Modulize
 const databaseHelper = (() => {
@@ -12,6 +13,7 @@ const databaseHelper = (() => {
             posts.initialize(database);
             comments.initialize(database);
             profile.initialize(database);
+            // feed.initialize(database);
         }
     }
 })();

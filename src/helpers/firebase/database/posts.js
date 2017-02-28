@@ -4,10 +4,17 @@ const postsHelper = (() => {
 
     let postsPerPage = 10;
 
+    const sortValues = {
+        // values mapped to firebase locations at baseRef/posts
+        클릭: 'views',
+        시간: 'time',
+        추천: 'upvotes'
+    };
+
     let data = {
         posts: [],
         currentPage: 1,
-        nextPage: true
+        nextPage: true,
     };
 
     let postData = {
@@ -28,11 +35,14 @@ const postsHelper = (() => {
             return data;
         },
 
-        async watchPosts(pageNum) {
+        async watchPosts({pageNum, sortValue}) {
             data.currentPage = pageNum;
 
             // +1 extra post to determine whether another page exists
-            const returnedData = await postsRef.orderByChild('isDeleted').equalTo(null).limitToLast((data.currentPage * postsPerPage) + 1).once('value');
+            let returnedData = await postsRef.orderByChild(sortValues[sortValue])
+                                        .limitToLast((data.currentPage * postsPerPage) + 1)
+                                        .once('value');
+
 
             if(returnedData) {
                 const watchPosts = await this.updatePosts(returnedData);
@@ -49,6 +59,7 @@ const postsHelper = (() => {
 
         async watchPost(postId) {
             const returnPostData = await postsRef.child(postId).once('value');
+            console.log(returnPostData.val());
 
             if(returnPostData.val()) {
                 let watchPostData = await this.updatePost(returnPostData);
@@ -67,15 +78,17 @@ const postsHelper = (() => {
 
         /* Update */
         updatePosts(postDataObj) {
-            // newPosts will be all posts through current page + 1
+            // newPosts will be aall posts through current page + 1
             let endAt = data.currentPage * postsPerPage;
 
             // add posts to new array
             let newPosts = [];
             postDataObj.forEach(postData => {
                 let post = postData.val();
-                post.id = postData.key;
-                newPosts.unshift(post);
+                if(!post.isDeleted) {
+                    post.id = postData.key;
+                    newPosts.unshift(post);
+                }
             });
 
             // if extra post doesn't exist, indicate that there are no more posts
@@ -114,9 +127,14 @@ const postsHelper = (() => {
             return postData;
         },
 
+        async updatePostView(postId) {
+            // Update post views
+            console.log('update post view - ', postId);
+            postsRef.child(`${postId}/views`).transaction(curr => (curr || 0) + 1);
+        },
+
         /* Delete */
         delete: (post) => {
-            console.log(post);
             postsRef.child(post.id).set({isDeleted: true}, (error) => {
                 if(error) { return; }
 

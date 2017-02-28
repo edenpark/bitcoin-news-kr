@@ -7,7 +7,7 @@ import {
     RegisterRoute,
     SinglePostRoute,
     ErrorRoute,
-    ProfileRoute
+    ProfileRoute,
 } from 'containers/routes';
 
 export default (
@@ -15,8 +15,11 @@ export default (
         <IndexRoute component={MainRoute} />
         <Route path="register" component={RegisterRoute} name="register "/>
         <Route path="post/:postId" component={ SinglePostRoute } name="post" />
-        <Route path="/profile/:username" component={ ProfileRoute } name="profile" />
+        <Route path="profile/:username" component={ ProfileRoute } name="profile" />
         <Route path="404" component={ ErrorRoute } name="404" />
-        <Redirect from="*" to="/404" name="404" />
+        <Redirect from="*" to="404" name="404" />
     </Route>
 );
+
+// AdminRoute
+// <Route path="/admin" component={ AdminRoute } name="admin" />

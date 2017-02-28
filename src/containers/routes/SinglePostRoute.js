@@ -22,6 +22,7 @@ import postsHelper from 'helpers/firebase/database/posts';
 import commentsHelper from 'helpers/firebase/database/comments';
 
 import Helmet from "react-helmet";
+import decode from 'ent/decode';
 
 class SinglePostRoute extends Component {
 
@@ -36,17 +37,27 @@ class SinglePostRoute extends Component {
     componentDidMount() {
         const { handlePostLoad } = this;
         const { FormActions } = this.props;
+        const { postId } = this.props.params;
 
         handlePostLoad();
 
         //Initialise comment form
         FormActions.initialize('commentForm');
+
+        //Update post views
+        console.log("let's request updatepostview - ", postId);
+        postsHelper.updatePostView(postId);
+    }
+
+    componentWillUnmount() {
+        const { SinglePostActions } = this.props;
+        SinglePostActions.initSinglePost();
     }
 
     handlePostLoad = async () => {
         const { postId } = this.props.params;
         const { SinglePostActions } = this.props;
-        const data = await postsHelper.watchPost(postId);
+        let data = await postsHelper.watchPost(postId);
         console.log(data);
         if(!data) {
             this.context.router.push('/404');
@@ -180,7 +191,7 @@ class SinglePostRoute extends Component {
                     single.get('loaded') &&
                     <Helmet
                     htmlAttributes={{lang: "ko", amp: undefined}} // amp takes no value
-                    title={`${post.get('title')} - 텔레토빗`}
+                    title={`${decode(post.get('title'))} - 텔레토빗`}
                     titleAttributes={{itemprop: "name", lang: "ko"}}
                     base={{target: "_blank", href: "http://localhost:3000"}}
                     meta={[

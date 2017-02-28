@@ -8,7 +8,6 @@ import * as header from 'redux/modules/base/header';
 // Load components
 import Header, {
     BrandLogo,
-    SidebarButton,
     AuthButton,
     UserButton,
     UserMenu
@@ -20,8 +19,9 @@ const { SocialLoginButton } = LoginModal;
 
 import auth from 'helpers/firebase/auth';
 import users from 'helpers/firebase/database/users';
-
 import storage from 'helpers/storage';
+
+import Helmet from "react-helmet";
 
 import 'styles/main.scss';
 
@@ -154,11 +154,21 @@ class App extends Component {
     render() {
         const { children, status: { modal, profile, header } } = this.props;
         const { handleModal, handleAuth, handleLinkAccount, handleUserMenu, handleLogOut } = this;
-
         return(
             <div>
+                {
+                    <Helmet
+                    htmlAttributes={{lang: "ko", amp: undefined}} // amp takes no value
+                    title={`텔레토빗`}
+                    titleAttributes={{itemprop: "name", lang: "ko"}}
+                    base={{target: "_blank", href: "http://localhost:3000"}}
+                    meta={[
+                        {name: "description", content: `세계 비트코인 뉴스 번역`},
+                        {property: "og:type", content: "article"}
+                    ]}
+                    />
+                }
                 <Header visible={header.get('visible')}>
-                    <SidebarButton />
                     <BrandLogo />
                     {
                         profile.get('username')

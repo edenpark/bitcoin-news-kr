@@ -4,14 +4,14 @@ import { Map } from 'immutable';
 /* Actions */
 const SINGLE_POST_LOAD = 'single/SINGLE_POST_LOAD';
 const POST_UPVOTE_UPDATE = 'single/POST_UPVOTE_UPDATE';
-
 const COMMENT_UPVOTE_UPDATE = 'single/COMMENT_UPVOTE_UPDATE';
+const SINGLE_POST_INIT = 'single/SINGLE_POST_INIT';
 
 /* action creators */
 export const loadSinglePost = createAction(SINGLE_POST_LOAD);
 export const updateUpvotePost = createAction(POST_UPVOTE_UPDATE);
-
 export const updateUpvoteComment = createAction(COMMENT_UPVOTE_UPDATE);
+export const initSinglePost = createAction(SINGLE_POST_INIT);
 
 /* initialState */
 const initialState = Map({
@@ -42,5 +42,9 @@ export default handleActions({
             return listing.get('id') === commentId;
         });
         return state.setIn(['comments', indexOfListingToUpdate, 'upvotes'], upvotes);
+    },
+    [SINGLE_POST_INIT]: (state, action) => {
+        state = initialState
+        return state
     }
 }, initialState);
