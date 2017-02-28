@@ -11,5 +11,6 @@ asset-manifest.json
 .DS_Store
 .env
 *.log
+npm-debug.log*
 
 # surge.sh
