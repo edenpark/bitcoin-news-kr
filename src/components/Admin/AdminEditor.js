@@ -7,17 +7,10 @@ import {
     Icon,
     Message
 } from 'semantic-ui-react';
-
+// import debounce from 'lodash/debounce';
 import decode from 'ent/decode';
-import debounce from 'lodash/debounce';
 
-
-class UrlEditor extends Component {
-    constructor(props) {
-        super(props);
-
-        this.delayedNoteChange = debounce(this.delayedNoteChange, 100);
-    }
+class AdminEditor extends Component {
 
     handleChanageNote = (e) => {
         e.persist();
@@ -27,16 +20,6 @@ class UrlEditor extends Component {
     delayedNoteChange = (e) => {
         const { onChangeNote } = this.props;
         onChangeNote(e.target.value);
-    }
-
-    handleChangeTitle = (e) => {
-        const { onChangeTitle } = this.props;
-        onChangeTitle(e.target.value);
-    }
-
-    handleChanageDescription = (e) => {
-        const { onChangeDescription } = this.props;
-        onChangeDescription(e.target.value);
     }
 
     handleChangeLink = (e) => {
@@ -64,41 +47,42 @@ class UrlEditor extends Component {
     }
 
     render() {
-        const { handleChangeLink, handleChanageNote, handleSubmit, handleChanageDescription, handleChangeTitle } = this;
 
-        const { editor, visible } = this.props;
+        const { handleChangeLink, handleChanageNote, handleSubmit,
+            handleChanageDescription, handleChangeTitle } = this;
+
+        const { editor } = this.props;
         const { fetching, fetched, valid, message } = editor.get('validity');
         const { title, description, source } = editor.get('metadata');
 
         return(
-            <div className="url-editor">
+            <div className="admin-editor">
                 <div className="link">
                     <Input
                         fluid
                         icon='linkify'
                         iconPosition='left'
                         labelPosition='right'
-                        placeholder="공유 할 페이지 주소를 넣어주세요. 한국어로 번역이 됩니다."
-                        value={editor.get('link')}
+                        placeholder="URL here"
                         loading={fetching}
                         onChange={handleChangeLink}
                     />
                 </div>
-                <div className={`extra ${visible ? 'show':''}`}>
-                    {
-                        !valid && message && (
-                            <Message color="red" size="mini">
-                                { message }
-                            </Message>
-                        )
-                    }
-                    {
-                        fetched && (
+                <div className="extra show">
+                {
+                    !valid && message && (
+                        <Message color="red" size="mini">
+                            { message }
+                        </Message>
+                    )
+                }
+                {
+                    fetched && (
                         <div>
                             <div className="input-description">
                                 <Form>
                                      <TextArea
-                                        placeholder="링크에 대한 설명을 덧붙여주세요"
+                                        placeholder="Note here"
                                         autoHeight
                                         onChange={handleChanageNote}
                                     />
@@ -109,8 +93,9 @@ class UrlEditor extends Component {
                                     <div className="title">
                                         <Form>
                                             <TextArea
-                                                value={decode(title)}
+                                                placeholder="Title here"
                                                 autoHeight
+                                                value={decode(title)}
                                                 onChange={handleChangeTitle}
                                             />
                                          </Form>
@@ -118,8 +103,9 @@ class UrlEditor extends Component {
                                     <div className="description">
                                         <Form>
                                              <TextArea
-                                                value={decode(description)}
+                                                placeholder="Description here"
                                                 autoHeight
+                                                value={decode(description)}
                                                 onChange={handleChanageDescription}
                                             />
                                         </Form>
@@ -135,16 +121,16 @@ class UrlEditor extends Component {
                                         onClick={handleSubmit}
                                         disabled={ !fetched || !valid}
                                 >
-                                    <Icon name='send' size='small'/>보내기
+                                    <Icon name='send' size='small'/>Post Now
                                 </Button>
                             </div>
                         </div>
-                        )
-                    }
+                    )
+                }
                 </div>
             </div>
         );
     }
 }
 
-export default UrlEditor;
+export default AdminEditor;

@@ -54,7 +54,6 @@ class MainRoute extends Component {
         const orgTitle = 'EU Proposes Storing Personal Data From Digital Currency E-Commerce In The Union';
         const orgDescription = 'A Committee of the European Parliament has proposed an amendment which includes e-commerce transactions using digital currencies, including bitcoin.';
         const source = 'news.bitcoin.com';
-        const image = "https://news.bitcoin.com/wp-content/uploads/2017/02/EU-Proposes-Storing-Personal-Data-From-Digital-Currency-E-Commerce-In-The-Union.png";
 
         const translateResult = await translate(orgTitle, orgDescription);
 
@@ -64,7 +63,6 @@ class MainRoute extends Component {
         EditorActions.setEditorMetadata({
             title: title,
             description: description,
-            image: image,
             source: source
         });
 
@@ -88,12 +86,10 @@ class MainRoute extends Component {
         //     console.log(title, description);
         //
         //     // Update metadata
-        //     const image = client.image || null;
         //
         //     EditorActions.setEditorMetadata({
-        //         title: client.title,
-        //         description: client.description,
-        //         image: image,
+        //         title: title,
+        //         description: description,
         //         source: client.host
         //     });
         //
@@ -121,7 +117,6 @@ class MainRoute extends Component {
         EditorActions.setEditorMetadata({
             title: title,
             description: description,
-            image: null,
             source: source
         });
 
@@ -188,9 +183,9 @@ class MainRoute extends Component {
             source: source,
             link: editor.get('link'),
             note: editor.get('note'),
-            time: Date.now(),
-            view: 0
+            time: Date.now()
         };
+        console.log(post);
         const submitPost = EditorActions.submitEditorPost(post);
         const initializeEditor = EditorActions.initializeEditor();
         const updatePosts = this.onPostsUpdate();

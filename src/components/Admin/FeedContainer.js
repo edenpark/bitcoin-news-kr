@@ -9,7 +9,7 @@ class FeedContainer extends Component {
 
 
     render() {
-
+        const { children } = this.props;
         return(
             <div>
                 <Button
@@ -18,6 +18,7 @@ class FeedContainer extends Component {
                     icon='connectdevelop'
                     color="teal"
                     />
+                { children }
             </div>
         );
     }

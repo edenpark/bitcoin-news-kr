@@ -7,7 +7,7 @@ const postsHelper = (() => {
     const sortValues = {
         // values mapped to firebase locations at baseRef/posts
         클릭: 'views',
-        시간: 'time',
+        최신: 'time',
         추천: 'upvotes'
     };
 
@@ -148,6 +148,7 @@ const postsHelper = (() => {
             let newPostRef = postsRef.push(post, (error) => {
                 if(error) {
                     console.log('createpost error: ', error);
+                    return;
                 }
 
                 let postId = newPostRef.key;

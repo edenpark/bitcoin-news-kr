@@ -4,24 +4,18 @@ import Request, { requize, pend, fulfill, reject } from 'helpers/request';
 import posts from 'helpers/firebase/database/posts';
 
 /* Actions */
-const EDITOR_SHOW= 'editor/EDITOR_SHOW';
-const EDITOR_HIDE = 'editor/EDITOR_HIDE';
+const EDITOR_LINK_SET = 'admin/EDITOR_LINK_SET';
+const EDITOR_NOTE_SET = 'admin/EDITOR_NOTE_SET';
+const EDITOR_METADATA_SET = 'admin/EDITOR_METADATA_SET';
+const EDITOR_VALIDATION_SET = 'admin/EDITOR_VALIDATION_SET';
 
-const EDITOR_LINK_SET = 'editor/EDITOR_LINK_SET';
-const EDITOR_NOTE_SET = 'editor/EDITOR_NOTE_SET';
-const EDITOR_METADATA_SET = 'editor/EDITOR_METADATA_SET';
-const EDITOR_VALIDATION_SET = 'editor/EDITOR_VALIDATION_SET';
+const EDITOR_POST_SUBMIT = requize('admin/EDITOR_SUBMIT');
+const EDITOR_POST_SUBMITTING = 'admin/EDITOR_POST_SUBMITTING';
+const EDITOR_INITIALIZE = 'admin/EDITOR_INITIALIZE';
 
-const EDITOR_POST_SUBMIT = requize('editor/EDITOR_SUBMIT');
-const EDITOR_POST_SUBMITTING = 'editor/EDITOR_POST_SUBMITTING';
-const EDITOR_INITIALIZE = 'editor/EDITOR_INITIALIZE';
-
-const EDITOR_TITLE_CHANGE = 'editor/EDITOR_TITLE_CHANGE';
-const EDITOR_DESCRIPTION_CHANGE = 'editor/EDITOR_DESCRIPTION_CHANGE';
+const EDITOR_TITLE_CHANGE = 'admin/EDITOR_TITLE_CHANGE';
+const EDITOR_DESCRIPTION_CHANGE = 'admin/EDITOR_DESCRIPTION_CHANGE';
 /* action creators */
-export const showEditor = createAction(EDITOR_SHOW);
-export const hideEditor = createAction(EDITOR_HIDE);
-
 export const setEditorLink = createAction(EDITOR_LINK_SET);
 export const setEditorNote = createAction(EDITOR_NOTE_SET);
 export const setEditorMetadata = createAction(EDITOR_METADATA_SET);
@@ -60,12 +54,6 @@ const initialState = Map({
 
 /* reducers */
 export default handleActions({
-    [EDITOR_SHOW]: (state, action) => {
-        return state.set('visible', true)
-    },
-    [EDITOR_HIDE]: (state, action) => {
-        return state.set('visible', false)
-    },
     [EDITOR_LINK_SET]: (state, action) => {
         const value = action.payload;
         return state.set('link', value)

@@ -18,7 +18,7 @@ export const updateSortPost = createAction(POST_SORT_UPDATE);
 const sortValues = {
     // values mapped to firebase locations at baseRef/posts
     클릭: 'views',
-    시간: 'time',
+    최신: 'time',
     추천: 'upvotes'
 };
 

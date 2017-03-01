@@ -7,7 +7,7 @@ import {
     RegisterRoute,
     SinglePostRoute,
     ErrorRoute,
-    ProfileRoute,    
+    ProfileRoute,
     AdminRoute
 } from 'containers/routes';
 

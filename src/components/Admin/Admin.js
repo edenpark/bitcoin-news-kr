@@ -13,4 +13,5 @@ const Admin = ({children}) => {
 };
 
 export { default as FeedContainer } from './FeedContainer';
+export { default as AdminEditor } from './AdminEditor';
 export default Admin;

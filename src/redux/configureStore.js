@@ -10,6 +10,7 @@ import editor from './modules/editor';
 import posts from './modules/posts';
 import single from './modules/single';
 import profile from './modules/profile';
+import admin from './modules/admin';
 
 /* Configure middleware */
 const middlewares = [promiseMiddleware()];
@@ -25,7 +26,8 @@ const reducer = combineReducers({
     editor,
     posts,
     single,
-    profile
+    profile,
+    admin
 });
 
 const configureStore = (initialState) => createStoreWithMiddleware(reducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
